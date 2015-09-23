@@ -58,7 +58,7 @@ Distribution-specific setup
     adduser --system --group --shell /bin/bash archiveteam
     apt-get update && apt-get install -y git-core libgnutls-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev
     pip install --upgrade seesaw
-    su -c "cd /home/archiveteam; git clone https://github.com/ArchiveTeam/thingiverse.git; cd thingiverse; ./get-wget-lua.sh" archiveteam
+    su -c "cd /home/archiveteam; git clone https://github.com/ArchiveTeam/thingiverse-grab.git; cd thingiverse-grab; ./get-wget-lua.sh" archiveteam
     screen su -c "cd /home/archiveteam/thingiverse/; run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE" archiveteam
     [... ctrl+A D to detach ...]
 
