@@ -57,7 +57,7 @@ if not WGET_LUA:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = "20150923.02"
+VERSION = "20150926.01"
 USER_AGENT = 'ArchiveTeam'
 TRACKER_ID = 'thingiverse'
 TRACKER_HOST = 'tracker.archiveteam.org'
@@ -173,7 +173,7 @@ class WgetArgs(object):
             "--truncate-output",
             "-e", "robots=off",
             "--rotate-dns",
-          #  "--recursive", "--level=inf",
+            "--recursive", "--level=inf",
             "--no-parent",
             "--page-requisites",
             "--timeout", "30",
@@ -194,10 +194,14 @@ class WgetArgs(object):
         item['item_type'] = item_type
         item['item_value'] = item_value
         
-        assert item_type in ('file')
+        assert item_type in ('file', 'thing')
         
         if item_type == 'file':
             wget_args.append('http://www.thingiverse.com/download:{0}'.format(item_value))
+        elif item_type == 'thing':
+            suffixes = string.digits
+            for url in ['http://www.thingiverse.com/thing:{0}{1}{2}'.format(item_value, a, b) for a in suffixes for b in suffixes]:
+                wget_args.append(url)
         else:
             raise Exception('Unknown item')
         
@@ -232,7 +236,7 @@ pipeline = Pipeline(
     WgetDownload(
         WgetArgs(),
         max_tries=2,
-        accept_on_exit_code=[0, 8],
+        accept_on_exit_code=[0, 4, 8],
         env={
             "item_dir": ItemValue("item_dir"),
             "item_value": ItemValue("item_value"),
