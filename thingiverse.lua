@@ -51,7 +51,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
   
   local function check(urla)
     local url = string.match(urla, "^([^#]+)")
-    if (downloaded[url] ~= true and addedtolist[url] ~= true) and ((string.match(url, "[^0-9]"..item_value.."[0-9][0-9]") and not string.match(url, "[^0-9]"..item_value.."[0-9][0-9][0-9]")) or string.match(url, "amazonaws%.com") or string.match(url, "chart%.apis%.google%.com")) then
+    if (downloaded[url] ~= true and addedtolist[url] ~= true) and ((string.match(url, "[^0-9]"..item_value.."[0-9][0-9]") and not string.match(url, "[^0-9]"..item_value.."[0-9][0-9][0-9]")) or string.match(url, "amazonaws%.com") or string.match(url, "chart%.apis%.google%.com") or string.match(url, "comments:")) then
       if string.match(url, "&amp;") then
         table.insert(urls, { url=string.gsub(url, "&amp;", "&") })
         addedtolist[url] = true
@@ -73,15 +73,15 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
     end
   end
   
-  if item_type == "thing" and string.match(url, "[^0-9]"..item_value.."[0-9][0-9]") and not string.match(url, "[^0-9]"..item_value.."[0-9][0-9][0-9]") then
+  if item_type == "thing" and ((string.match(url, "[^0-9]"..item_value.."[0-9][0-9]") and not string.match(url, "[^0-9]"..item_value.."[0-9][0-9][0-9]")) or string.match(url, "comments:")) then
     html = read_file(file)
-    for newurl in string.gmatch(html, '([^"]+)"') do
+    for newurl in string.gmatch(html, '([^"]+)') do
       checknewurl(newurl)
     end
-    for newurl in string.gmatch(html, "([^']+)'") do
+    for newurl in string.gmatch(html, "([^']+)") do
       checknewurl(newurl)
     end
-    for newurl in string.gmatch(html, ">([^<]+)<") do
+    for newurl in string.gmatch(html, ">([^<]+)") do
       checknewurl(newurl)
     end
   end
